@@ -1,6 +1,6 @@
 # wanandroid
 
-a demo for flutter practise
+wanandroid flutter 练习Demo
 
 ## Getting Started
 
