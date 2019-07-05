@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wanandroid/pages/Knowledge_tree.dart';
+import 'package:wanandroid/pages/gank_mz.dart';
 import 'package:wanandroid/pages/home_page.dart';
 import 'package:wanandroid/pages/public_subscriptions.dart';
 import 'package:wanandroid/widget/my_drawer_wdiget.dart';
@@ -40,11 +40,7 @@ class NavigatorState extends State<MyNavigator> {
       drawer: MyDrawer(),
       body: PageView(
         controller: _pageController,
-        children: <Widget>[
-          HomePage(),
-          KnowledgeTreePage(),
-          PublicSubscriptionPage()
-        ],
+        children: <Widget>[HomePage(), GankMzPage(), PublicSubscriptionPage()],
         onPageChanged: (index) {
           setState(() {
             this._currentIndex = index;
@@ -70,7 +66,7 @@ class NavigatorState extends State<MyNavigator> {
                 backgroundColor: Colors.white),
             BottomNavigationBarItem(
                 icon: Icon(Icons.apps),
-                title: Text("体系"),
+                title: Text("福利"),
                 backgroundColor: Colors.white),
             BottomNavigationBarItem(
                 icon: Icon(Icons.map),
@@ -84,7 +80,7 @@ class NavigatorState extends State<MyNavigator> {
     if (_currentIndex == 0) {
       this.appBarTitle = "首页";
     } else if (_currentIndex == 1) {
-      this.appBarTitle = "知识体系";
+      this.appBarTitle = "福利";
     } else {
       this.appBarTitle = "公众号";
     }

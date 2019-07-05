@@ -32,22 +32,7 @@ class HomeState extends State<HomePage>
     super.initState();
 
     scrollController = new ScrollController();
-    scrollController.addListener(() {
-      if (scrollController.position.pixels >= 200) {
-        setState(() {
-          showFloatingButton = true;
-        });
-      }
-      if (scrollController.position.pixels ==
-          scrollController.position.maxScrollExtent) {
-        //加载更多
-        print('滑动到了最底部${scrollController.position.pixels}');
-        setState(() {
-          pageIndex++;
-          _fetchArticleData();
-        });
-      }
-    });
+    scrollController.addListener(_loadMore);
 
     _homeBannerData = new List();
     _homeArticleData = new List();
@@ -111,6 +96,21 @@ class HomeState extends State<HomePage>
     });
   }
 
+  _loadMore() {
+    if (scrollController.position.pixels >= 200) {
+      setState(() {
+        showFloatingButton = true;
+      });
+    }
+    if (scrollController.position.pixels ==
+        scrollController.position.maxScrollExtent) {
+      //加载更多
+      print('滑动到了最底部${scrollController.position.pixels}');
+      pageIndex++;
+      _fetchArticleData();
+    }
+  }
+
   Widget get swiper {
     return Container(
       height: 200,
@@ -151,19 +151,7 @@ class HomeState extends State<HomePage>
     List<Widget> articles = new List();
     if (_homeArticleData != null && _homeArticleData.length > 0) {
       _homeArticleData.forEach((item) {
-        articles.add(Container(
-          alignment: Alignment.centerLeft,
-          color: Colors.white,
-          padding: EdgeInsets.only(left: 10),
-          margin: EdgeInsets.only(left: 15, top: 10, right: 15, bottom: 0),
-          height: 50,
-          child: GestureDetector(
-            onTap: () {
-              MyUtil.navigatorToWebView(context, item.link, item.title);
-            },
-            child: Text(item.title),
-          ),
-        ));
+        articles.add(_getArticleItem(item));
       });
     }
     if (articles.length > 0) {
@@ -172,10 +160,25 @@ class HomeState extends State<HomePage>
       );
     } else {
       return Center(
-        heightFactor: 1,
-        child: Text("努力加载中......"),
+        child: CircularProgressIndicator(),
       );
     }
+  }
+
+  Widget _getArticleItem(HomeArticle item) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      color: Colors.white,
+      padding: EdgeInsets.only(left: 10),
+      margin: EdgeInsets.only(left: 15, top: 10, right: 15, bottom: 0),
+      height: 50,
+      child: GestureDetector(
+        onTap: () {
+          MyUtil.navigatorToWebView(context, item.link, item.title);
+        },
+        child: Text(item.title),
+      ),
+    );
   }
 
   @override

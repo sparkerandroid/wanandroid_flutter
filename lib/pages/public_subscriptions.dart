@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wanandroid/dao/public_subscription_dao.dart';
+import 'package:wanandroid/model/public_subscription_model.dart';
 import 'package:wanandroid/widget/subscription_page_widget.dart';
 
 class PublicSubscriptionPage extends StatefulWidget {
@@ -12,9 +13,12 @@ class PublicSubscriptionPage extends StatefulWidget {
 }
 
 class PublicSubscriptionState extends State<PublicSubscriptionPage>
-    with SingleTickerProviderStateMixin {
+    with
+        SingleTickerProviderStateMixin,
+        AutomaticKeepAliveClientMixin<PublicSubscriptionPage> {
   TabController _tabController;
 
+  List<Data> _tabData = [];
   List<Tab> _tabs = [];
 
   @override
@@ -27,19 +31,25 @@ class PublicSubscriptionState extends State<PublicSubscriptionPage>
   @override
   Widget build(BuildContext context) {
     if (_tabs.length <= 0) {
-      return null;
+      return Center(
+        child: CircularProgressIndicator(),
+      );
     } else {
       return Scaffold(
-        appBar: AppBar(
-          bottom: TabBar(
-            tabs: _tabs,
-            controller: _tabController,
-            isScrollable: true,
-          ),
-        ),
+        appBar: PreferredSize(
+            child: AppBar(
+              bottom: TabBar(
+                tabs: _tabs,
+                controller: _tabController,
+                isScrollable: true,
+              ),
+            ),
+            preferredSize: Size.fromHeight(50)),
         body: TabBarView(
-          children: _tabs.map((item) {
-//            SubscriptionPage(item.)
+          children: _tabData.map((item) {
+            return SubscriptionPage(
+              subscriptionId: item?.id,
+            );
           }).toList(),
           controller: _tabController,
         ),
@@ -48,7 +58,9 @@ class PublicSubscriptionState extends State<PublicSubscriptionPage>
   }
 
   void _getSubscriptions() {
+    _tabs?.clear();
     PublicSubscriptionDao.getSubscriptions().then((subscriptions) {
+      _tabData = subscriptions?.data ?? [];
       setState(() {
         subscriptions?.data?.forEach((item) {
           _tabs.add(new Tab(text: item.name));
@@ -64,4 +76,7 @@ class PublicSubscriptionState extends State<PublicSubscriptionPage>
       _tabController.dispose();
     }
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

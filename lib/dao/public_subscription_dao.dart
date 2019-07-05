@@ -18,12 +18,13 @@ class PublicSubscriptionDao {
   }
 
   static Future<PublicSubscriptionArticlesModel> fetchSubscriptionArticles(
-      int pageIndex) async {
+      int subscriptionId, int pageIndex) async {
     if (pageIndex < 0) {
       return null;
     }
-    final response = await http.get(
-        Apis.PUBLIC_SUBSCRIPTION_HISTORY.replaceAll("#", pageIndex.toString()));
+    final response = await http.get(Apis.PUBLIC_SUBSCRIPTION_HISTORY
+        .replaceAll("@", pageIndex.toString())
+        .replaceAll("#", subscriptionId.toString()));
     if (response != null && response.statusCode == 200) {
       Utf8Decoder utf8decoder = Utf8Decoder();
       return PublicSubscriptionArticlesModel.fromJson(

@@ -5,5 +5,6 @@ class Apis {
   static const PUBLIC_SUBSCRIPTION =
       "https://wanandroid.com/wxarticle/chapters/json";
   static const PUBLIC_SUBSCRIPTION_HISTORY =
-      "https://wanandroid.com/wxarticle/list/408/1/json";
+      "https://wanandroid.com/wxarticle/list/#/@/json"; //#:替换为公众号id，@替换为页码
+  static const GANK_MZ_PICS = "http://gank.io/api/data/福利/10/#"; //#为页码
 }
